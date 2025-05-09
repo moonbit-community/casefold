@@ -18,3 +18,8 @@ pub fn casefold(s : String) -> String {
     str_buf.to_string()
   }
 }
+
+///|
+pub fn casefold_char(ch : Char) -> Fold {
+  lookup(ch)
+}
