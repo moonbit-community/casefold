@@ -10,7 +10,7 @@ fn lookup(orig : Char) -> Fold {
   //    Alone, this decreases the binary size but results in performance regression over the simple 1:1 lookup.
   // 2. Most of the mappings are from relatively small chars (0 - 0x2CFF).
   //    To benefit from this, we use a jump table based on the high byte for this range.
-  //    This more than recovers the performance regression from exploting fact #1, at least in the tested benchmark.
+  //    This more than recovers the performance regression from exploiting fact #1, at least in the tested benchmark.
   let u16_mask : UInt = 0x0000FFFFU
   let from = orig.to_uint()
   if from <= 0x2CFF {
