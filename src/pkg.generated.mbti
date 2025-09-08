@@ -1,0 +1,22 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "myfreess/casefold"
+
+// Values
+fn casefold(String) -> String
+
+fn casefold_char(Char) -> Fold
+
+// Errors
+
+// Types and methods
+pub enum Fold {
+  One(Char)
+  Two(Char, Char)
+  Three(Char, Char, Char)
+}
+fn Fold::collect(Self) -> Array[Char]
+
+// Type aliases
+
+// Traits
+
