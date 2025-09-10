@@ -160,7 +160,7 @@ mbt.write('    //    To benefit from this, we match on ranges instead of single 
 mbt.write('    //    Alone, this decreases the binary size but results in performance regression over the simple 1:1 lookup.\n')
 mbt.write('    // 2. Most of the mappings are from relatively small chars (0 - 0x2CFF).\n')
 mbt.write('    //    To benefit from this, we use a jump table based on the high byte for this range.\n')
-mbt.write('    //    This more than recovers the performance regression from exploting fact #1, at least in the tested benchmark.\n')
+mbt.write('    //    This more than recovers the performance regression from exploiting fact #1, at least in the tested benchmark.\n')
 mbt.write('    let u16_mask : UInt = 0x0000FFFFU\n')
 mbt.write('    let from = orig.to_uint()\n')
 mbt.write('    if from <= 0x2CFF {\n')
