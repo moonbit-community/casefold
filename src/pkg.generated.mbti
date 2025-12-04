@@ -1,10 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "myfreess/casefold"
+package "moonbit-community/casefold"
 
 // Values
-fn casefold(String) -> String
+pub fn casefold(String) -> String
 
-fn casefold_char(Char) -> Fold
+pub fn casefold_char(Char) -> Fold
 
 // Errors
 
@@ -14,7 +14,7 @@ pub enum Fold {
   Two(Char, Char)
   Three(Char, Char, Char)
 }
-fn Fold::collect(Self) -> Array[Char]
+pub fn Fold::collect(Self) -> Array[Char]
 
 // Type aliases
 
