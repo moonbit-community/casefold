@@ -1999,7 +1999,7 @@ test "lookup_consistency" {
     let actual : Array[Char] = lookup(c).collect()
     if actual != reference {
       println(
-        "case-folding \{c} \{c_index} failed: Expected \{reference}, got \{actual}",
+        "case-folding \{c} \{c_index} failed: Expected \{@debug.to_string(reference)}, got \{@debug.to_string(actual)}",
       )
       panic()
     }

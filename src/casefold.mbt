@@ -14,7 +14,7 @@ pub fn casefold(s : String) -> String {
         str_buf.write_char(c3)
       }
     }
-  } else {
+  } nobreak {
     str_buf.to_string()
   }
 }
