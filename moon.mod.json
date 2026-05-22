@@ -5,6 +5,6 @@
   "repository": "https://github.com/moonbit-community/casefold",
   "license": "Apache-2.0",
   "keywords": [],
-  "description": "",
+  "description": "Simple Unicode CaseFold Implementation",
   "source": "src"
 }
