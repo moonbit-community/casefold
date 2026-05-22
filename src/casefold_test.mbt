@@ -98,9 +98,9 @@ test "Turkish I with dot" {
 ///|
 test "casefold_char function" {
   let result = @casefold.casefold_char('A')
-  assert_eq(result.collect(), ['a'])
+  @debug.assert_eq(result.collect(), ['a'])
   let result_german = @casefold.casefold_char('ß')
-  assert_eq(result_german.collect(), ['s', 's'])
+  @debug.assert_eq(result_german.collect(), ['s', 's'])
 }
 
 ///|

@@ -282,7 +282,7 @@ write('        let c = Int::unsafe_to_char(c_index)\n');
 write('        let reference: Array[Char] = lookup_naive(c).collect()\n');
 write('        let actual: Array[Char] = lookup(c).collect()\n');
 write('        if actual != reference {\n');
-write('            println("case-folding \\{c} \\{c_index} failed: Expected \\{reference}, got \\{actual}")\n');
+write('            println("case-folding \\{c} \\{c_index} failed: Expected \\{@debug.to_string(reference)}, got \\{@debug.to_string(actual)}")\n');
 write('            panic()\n');
 write('        }\n');
 write('   }\n');
