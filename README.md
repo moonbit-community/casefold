@@ -6,6 +6,6 @@ Unicode CaseFold library for MoonBit
 
 ```
 curl -O http://www.unicode.org/Public/UNIDATA/CaseFolding.txt
-python3 scripts/mapgen.py
+node scripts/mapgen.mjs
 moon fmt
 ```
