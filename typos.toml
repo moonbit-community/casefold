@@ -1,7 +1,0 @@
-[files]
-extend-exclude = ["CaseFolding.txt"]
-
-[default.extend-words]
-ba = "ba"
-caf = "caf"
-ede = "ede"
