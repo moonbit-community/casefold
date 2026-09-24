@@ -1,0 +1,15 @@
+name = "moonbit-community/casefold"
+
+version = "0.1.5"
+
+readme = "README.md"
+
+repository = "https://github.com/moonbit-community/casefold"
+
+license = "Apache-2.0"
+
+keywords = [ ]
+
+description = "Simple Unicode CaseFold Implementation"
+
+source = "src"
