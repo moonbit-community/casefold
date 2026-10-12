@@ -31,6 +31,7 @@ jobs:
         run: |
           Set-ExecutionPolicy RemoteSigned -Scope CurrentUser; irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
           "C:\Users\runneradmin\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "MOONBIT_NEW_NATIVE=1" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: moon version
         run: |
