@@ -11,38 +11,38 @@ fn lookup(orig : Char) -> Fold {
   // 2. Most of the mappings are from relatively small chars (0 - 0x2CFF).
   //    To benefit from this, we use a jump table based on the high byte for this range.
   //    This more than recovers the performance regression from exploiting fact #1, at least in the tested benchmark.
-  let u16_mask : UInt = 0x0000FFFFU
+  let u16_mask : UInt32 = 0x0000FFFFU
   let from = orig.to_uint()
   if from <= 0x2CFF {
     let from = from & u16_mask
     let high_byte = (from >> 8).to_byte()
     let low_byte = (from & 0x0000_00FFU).to_byte()
-    let single_char : UInt = match high_byte {
+    let single_char : UInt32 = match high_byte {
       0x00 =>
         match low_byte {
-          b'\x41'..=b'\x5a' => from + 0x0020
+          b'\x41'..<=b'\x5a' => from + 0x0020
           b'\xb5' => 0x03bcU
-          b'\xc0'..=b'\xd6' => from + 0x0020
-          b'\xd8'..=b'\xde' => from + 0x0020
+          b'\xc0'..<=b'\xd6' => from + 0x0020
+          b'\xd8'..<=b'\xde' => from + 0x0020
           b'\xdf' => return Two('\u{0073}', '\u{0073}')
           _ => from
         }
       0x01 =>
         match low_byte {
-          _..=b'\x2e' => from | 0x0000_0001U
+          _..<=b'\x2e' => from | 0x0000_0001U
           b'\x30' => return Two('\u{0069}', '\u{0307}')
-          b'\x32'..=b'\x36' => from | 0x0000_0001U
-          b'\x39'..=b'\x47' => (from + 1) & 0xFFFF_FFFEU
+          b'\x32'..<=b'\x36' => from | 0x0000_0001U
+          b'\x39'..<=b'\x47' => (from + 1) & 0xFFFF_FFFEU
           b'\x49' => return Two('\u{02bc}', '\u{006e}')
-          b'\x4a'..=b'\x76' => from | 0x0000_0001U
+          b'\x4a'..<=b'\x76' => from | 0x0000_0001U
           b'\x78' => 0x00ffU
-          b'\x79'..=b'\x7d' => (from + 1) & 0xFFFF_FFFEU
+          b'\x79'..<=b'\x7d' => (from + 1) & 0xFFFF_FFFEU
           b'\x7f' => 0x0073U
           b'\x81' => 0x0253U
-          b'\x82'..=b'\x84' => from | 0x0000_0001U
+          b'\x82'..<=b'\x84' => from | 0x0000_0001U
           b'\x86' => 0x0254U
           b'\x87' => 0x0188U
-          b'\x89'..=b'\x8a' => from + 0x00cd
+          b'\x89'..<=b'\x8a' => from + 0x00cd
           b'\x8b' => 0x018cU
           b'\x8e' => 0x01ddU
           b'\x8f' => 0x0259U
@@ -56,15 +56,15 @@ fn lookup(orig : Char) -> Fold {
           b'\x9c' => 0x026fU
           b'\x9d' => 0x0272U
           b'\x9f' => 0x0275U
-          b'\xa0'..=b'\xa4' => from | 0x0000_0001U
+          b'\xa0'..<=b'\xa4' => from | 0x0000_0001U
           b'\xa6' => 0x0280U
           b'\xa7' => 0x01a8U
           b'\xa9' => 0x0283U
           b'\xac' => 0x01adU
           b'\xae' => 0x0288U
           b'\xaf' => 0x01b0U
-          b'\xb1'..=b'\xb2' => from + 0x00d9
-          b'\xb3'..=b'\xb5' => (from + 1) & 0xFFFF_FFFEU
+          b'\xb1'..<=b'\xb2' => from + 0x00d9
+          b'\xb3'..<=b'\xb5' => (from + 1) & 0xFFFF_FFFEU
           b'\xb7' => 0x0292U
           b'\xb8' => 0x01b9U
           b'\xbc' => 0x01bdU
@@ -73,11 +73,11 @@ fn lookup(orig : Char) -> Fold {
           b'\xc7' => 0x01c9U
           b'\xc8' => 0x01c9U
           b'\xca' => 0x01ccU
-          b'\xcb'..=b'\xdb' => (from + 1) & 0xFFFF_FFFEU
-          b'\xde'..=b'\xee' => from | 0x0000_0001U
+          b'\xcb'..<=b'\xdb' => (from + 1) & 0xFFFF_FFFEU
+          b'\xde'..<=b'\xee' => from | 0x0000_0001U
           b'\xf0' => return Two('\u{006a}', '\u{030c}')
           b'\xf1' => 0x01f3U
-          b'\xf2'..=b'\xf4' => from | 0x0000_0001U
+          b'\xf2'..<=b'\xf4' => from | 0x0000_0001U
           b'\xf6' => 0x0195U
           b'\xf7' => 0x01bfU
           b'\xf8'..<_ => from | 0x0000_0001U
@@ -85,9 +85,9 @@ fn lookup(orig : Char) -> Fold {
         }
       0x02 =>
         match low_byte {
-          _..=b'\x1e' => from | 0x0000_0001U
+          _..<=b'\x1e' => from | 0x0000_0001U
           b'\x20' => 0x019eU
-          b'\x22'..=b'\x32' => from | 0x0000_0001U
+          b'\x22'..<=b'\x32' => from | 0x0000_0001U
           b'\x3a' => 0x2c65U
           b'\x3b' => 0x023cU
           b'\x3d' => 0x019aU
@@ -96,22 +96,22 @@ fn lookup(orig : Char) -> Fold {
           b'\x43' => 0x0180U
           b'\x44' => 0x0289U
           b'\x45' => 0x028cU
-          b'\x46'..=b'\x4e' => from | 0x0000_0001U
+          b'\x46'..<=b'\x4e' => from | 0x0000_0001U
           _ => from
         }
       0x03 =>
         match low_byte {
           b'\x45' => 0x03b9U
-          b'\x70'..=b'\x72' => from | 0x0000_0001U
+          b'\x70'..<=b'\x72' => from | 0x0000_0001U
           b'\x76' => 0x0377U
           b'\x7f' => 0x03f3U
           b'\x86' => 0x03acU
-          b'\x88'..=b'\x8a' => from + 0x0025
+          b'\x88'..<=b'\x8a' => from + 0x0025
           b'\x8c' => 0x03ccU
-          b'\x8e'..=b'\x8f' => from + 0x003f
+          b'\x8e'..<=b'\x8f' => from + 0x003f
           b'\x90' => return Three('\u{03b9}', '\u{0308}', '\u{0301}')
-          b'\x91'..=b'\xa1' => from + 0x0020
-          b'\xa3'..=b'\xab' => from + 0x0020
+          b'\x91'..<=b'\xa1' => from + 0x0020
+          b'\xa3'..<=b'\xab' => from + 0x0020
           b'\xb0' => return Three('\u{03c5}', '\u{0308}', '\u{0301}')
           b'\xc2' => 0x03c3U
           b'\xcf' => 0x03d7U
@@ -119,7 +119,7 @@ fn lookup(orig : Char) -> Fold {
           b'\xd1' => 0x03b8U
           b'\xd5' => 0x03c6U
           b'\xd6' => 0x03c0U
-          b'\xd8'..=b'\xee' => from | 0x0000_0001U
+          b'\xd8'..<=b'\xee' => from | 0x0000_0001U
           b'\xf0' => 0x03baU
           b'\xf1' => 0x03c1U
           b'\xf4' => 0x03b8U
@@ -132,19 +132,19 @@ fn lookup(orig : Char) -> Fold {
         }
       0x04 =>
         match low_byte {
-          _..=b'\x0f' => from + 0x0050
-          b'\x10'..=b'\x2f' => from + 0x0020
-          b'\x60'..=b'\x80' => from | 0x0000_0001U
-          b'\x8a'..=b'\xbe' => from | 0x0000_0001U
+          _..<=b'\x0f' => from + 0x0050
+          b'\x10'..<=b'\x2f' => from + 0x0020
+          b'\x60'..<=b'\x80' => from | 0x0000_0001U
+          b'\x8a'..<=b'\xbe' => from | 0x0000_0001U
           b'\xc0' => 0x04cfU
-          b'\xc1'..=b'\xcd' => (from + 1) & 0xFFFF_FFFEU
+          b'\xc1'..<=b'\xcd' => (from + 1) & 0xFFFF_FFFEU
           b'\xd0'..<_ => from | 0x0000_0001U
           _ => from
         }
       0x05 =>
         match low_byte {
-          _..=b'\x2e' => from | 0x0000_0001U
-          b'\x31'..=b'\x56' => from + 0x0030
+          _..<=b'\x2e' => from | 0x0000_0001U
+          b'\x31'..<=b'\x56' => from + 0x0030
           b'\x87' => return Two('\u{0565}', '\u{0582}')
           _ => from
         }
@@ -160,7 +160,7 @@ fn lookup(orig : Char) -> Fold {
       0x0f => from
       0x10 =>
         match low_byte {
-          b'\xa0'..=b'\xc5' => from + 0x1c60
+          b'\xa0'..<=b'\xc5' => from + 0x1c60
           b'\xc7' => 0x2d27U
           b'\xcd' => 0x2d2dU
           _ => from
@@ -169,7 +169,7 @@ fn lookup(orig : Char) -> Fold {
       0x12 => from
       0x13 =>
         match low_byte {
-          b'\xf8'..=b'\xfd' => from - 0x0008
+          b'\xf8'..<=b'\xfd' => from - 0x0008
           _ => from
         }
       0x14 => from
@@ -185,20 +185,20 @@ fn lookup(orig : Char) -> Fold {
           b'\x80' => 0x0432U
           b'\x81' => 0x0434U
           b'\x82' => 0x043eU
-          b'\x83'..=b'\x84' => from - 0x1842
+          b'\x83'..<=b'\x84' => from - 0x1842
           b'\x85' => 0x0442U
           b'\x86' => 0x044aU
           b'\x87' => 0x0463U
           b'\x88' => 0xa64bU
           b'\x89' => 0x1c8aU
-          b'\x90'..=b'\xba' => from - 0x0bc0
-          b'\xbd'..=b'\xbf' => from - 0x0bc0
+          b'\x90'..<=b'\xba' => from - 0x0bc0
+          b'\xbd'..<=b'\xbf' => from - 0x0bc0
           _ => from
         }
       0x1d => from
       0x1e =>
         match low_byte {
-          _..=b'\x94' => from | 0x0000_0001U
+          _..<=b'\x94' => from | 0x0000_0001U
           b'\x96' => return Two('\u{0068}', '\u{0331}')
           b'\x97' => return Two('\u{0074}', '\u{0308}')
           b'\x98' => return Two('\u{0077}', '\u{030a}')
@@ -206,27 +206,27 @@ fn lookup(orig : Char) -> Fold {
           b'\x9a' => return Two('\u{0061}', '\u{02be}')
           b'\x9b' => 0x1e61U
           b'\x9e' => return Two('\u{0073}', '\u{0073}')
-          b'\xa0'..=b'\xfe' => from | 0x0000_0001U
+          b'\xa0'..<=b'\xfe' => from | 0x0000_0001U
           _ => from
         }
       0x1f =>
         match low_byte {
-          b'\x08'..=b'\x0f' => from - 0x0008
-          b'\x18'..=b'\x1d' => from - 0x0008
-          b'\x28'..=b'\x2f' => from - 0x0008
-          b'\x38'..=b'\x3f' => from - 0x0008
-          b'\x48'..=b'\x4d' => from - 0x0008
+          b'\x08'..<=b'\x0f' => from - 0x0008
+          b'\x18'..<=b'\x1d' => from - 0x0008
+          b'\x28'..<=b'\x2f' => from - 0x0008
+          b'\x38'..<=b'\x3f' => from - 0x0008
+          b'\x48'..<=b'\x4d' => from - 0x0008
           b'\x50' => return Two('\u{03c5}', '\u{0313}')
           b'\x52' => return Three('\u{03c5}', '\u{0313}', '\u{0300}')
           b'\x54' => return Three('\u{03c5}', '\u{0313}', '\u{0301}')
           b'\x56' => return Three('\u{03c5}', '\u{0313}', '\u{0342}')
-          b'\x59'..=b'\x5f' =>
+          b'\x59'..<=b'\x5f' =>
             if (from & 0x0000_0001U) == 1 {
               from - 0x0008
             } else {
               from
             }
-          b'\x68'..=b'\x6f' => from - 0x0008
+          b'\x68'..<=b'\x6f' => from - 0x0008
           b'\x80' => return Two('\u{1f00}', '\u{03b9}')
           b'\x81' => return Two('\u{1f01}', '\u{03b9}')
           b'\x82' => return Two('\u{1f02}', '\u{03b9}')
@@ -280,8 +280,8 @@ fn lookup(orig : Char) -> Fold {
           b'\xb4' => return Two('\u{03ac}', '\u{03b9}')
           b'\xb6' => return Two('\u{03b1}', '\u{0342}')
           b'\xb7' => return Three('\u{03b1}', '\u{0342}', '\u{03b9}')
-          b'\xb8'..=b'\xb9' => from - 0x0008
-          b'\xba'..=b'\xbb' => from - 0x004a
+          b'\xb8'..<=b'\xb9' => from - 0x0008
+          b'\xba'..<=b'\xbb' => from - 0x004a
           b'\xbc' => return Two('\u{03b1}', '\u{03b9}')
           b'\xbe' => 0x03b9U
           b'\xc2' => return Two('\u{1f74}', '\u{03b9}')
@@ -289,29 +289,29 @@ fn lookup(orig : Char) -> Fold {
           b'\xc4' => return Two('\u{03ae}', '\u{03b9}')
           b'\xc6' => return Two('\u{03b7}', '\u{0342}')
           b'\xc7' => return Three('\u{03b7}', '\u{0342}', '\u{03b9}')
-          b'\xc8'..=b'\xcb' => from - 0x0056
+          b'\xc8'..<=b'\xcb' => from - 0x0056
           b'\xcc' => return Two('\u{03b7}', '\u{03b9}')
           b'\xd2' => return Three('\u{03b9}', '\u{0308}', '\u{0300}')
           b'\xd3' => return Three('\u{03b9}', '\u{0308}', '\u{0301}')
           b'\xd6' => return Two('\u{03b9}', '\u{0342}')
           b'\xd7' => return Three('\u{03b9}', '\u{0308}', '\u{0342}')
-          b'\xd8'..=b'\xd9' => from - 0x0008
-          b'\xda'..=b'\xdb' => from - 0x0064
+          b'\xd8'..<=b'\xd9' => from - 0x0008
+          b'\xda'..<=b'\xdb' => from - 0x0064
           b'\xe2' => return Three('\u{03c5}', '\u{0308}', '\u{0300}')
           b'\xe3' => return Three('\u{03c5}', '\u{0308}', '\u{0301}')
           b'\xe4' => return Two('\u{03c1}', '\u{0313}')
           b'\xe6' => return Two('\u{03c5}', '\u{0342}')
           b'\xe7' => return Three('\u{03c5}', '\u{0308}', '\u{0342}')
-          b'\xe8'..=b'\xe9' => from - 0x0008
-          b'\xea'..=b'\xeb' => from - 0x0070
+          b'\xe8'..<=b'\xe9' => from - 0x0008
+          b'\xea'..<=b'\xeb' => from - 0x0070
           b'\xec' => 0x1fe5U
           b'\xf2' => return Two('\u{1f7c}', '\u{03b9}')
           b'\xf3' => return Two('\u{03c9}', '\u{03b9}')
           b'\xf4' => return Two('\u{03ce}', '\u{03b9}')
           b'\xf6' => return Two('\u{03c9}', '\u{0342}')
           b'\xf7' => return Three('\u{03c9}', '\u{0342}', '\u{03b9}')
-          b'\xf8'..=b'\xf9' => from - 0x0080
-          b'\xfa'..=b'\xfb' => from - 0x007e
+          b'\xf8'..<=b'\xf9' => from - 0x0080
+          b'\xfa'..<=b'\xfb' => from - 0x007e
           b'\xfc' => return Two('\u{03c9}', '\u{03b9}')
           _ => from
         }
@@ -322,7 +322,7 @@ fn lookup(orig : Char) -> Fold {
           b'\x2a' => 0x006bU
           b'\x2b' => 0x00e5U
           b'\x32' => 0x214eU
-          b'\x60'..=b'\x6f' => from + 0x0010
+          b'\x60'..<=b'\x6f' => from + 0x0010
           b'\x83' => 0x2184U
           _ => from
         }
@@ -330,7 +330,7 @@ fn lookup(orig : Char) -> Fold {
       0x23 => from
       0x24 =>
         match low_byte {
-          b'\xb6'..=b'\xcf' => from + 0x001a
+          b'\xb6'..<=b'\xcf' => from + 0x001a
           _ => from
         }
       0x25 => from
@@ -342,40 +342,40 @@ fn lookup(orig : Char) -> Fold {
       0x2b => from
       0x2c =>
         match low_byte {
-          _..=b'\x2f' => from + 0x0030
+          _..<=b'\x2f' => from + 0x0030
           b'\x60' => 0x2c61U
           b'\x62' => 0x026bU
           b'\x63' => 0x1d7dU
           b'\x64' => 0x027dU
-          b'\x67'..=b'\x6b' => (from + 1) & 0xFFFF_FFFEU
+          b'\x67'..<=b'\x6b' => (from + 1) & 0xFFFF_FFFEU
           b'\x6d' => 0x0251U
           b'\x6e' => 0x0271U
           b'\x6f' => 0x0250U
           b'\x70' => 0x0252U
           b'\x72' => 0x2c73U
           b'\x75' => 0x2c76U
-          b'\x7e'..=b'\x7f' => from - 0x2a3f
-          b'\x80'..=b'\xe2' => from | 0x0000_0001U
-          b'\xeb'..=b'\xed' => (from + 1) & 0xFFFF_FFFEU
+          b'\x7e'..<=b'\x7f' => from - 0x2a3f
+          b'\x80'..<=b'\xe2' => from | 0x0000_0001U
+          b'\xeb'..<=b'\xed' => (from + 1) & 0xFFFF_FFFEU
           b'\xf2' => 0x2cf3U
           _ => from
         }
       _ => from
     }
-    One(Int::unsafe_to_char(single_char.reinterpret_as_int()))
+    One(Int32::unsafe_to_char(single_char.reinterpret_as_int()))
   } else {
-    let single_char : UInt = match from {
-      0xa640U..=0xa66cU => from | 0x0000_0001U
-      0xa680U..=0xa69aU => from | 0x0000_0001U
-      0xa722U..=0xa72eU => from | 0x0000_0001U
-      0xa732U..=0xa76eU => from | 0x0000_0001U
-      0xa779U..=0xa77bU => (from + 1) & 0xFFFF_FFFEU
+    let single_char : UInt32 = match from {
+      0xa640U..<=0xa66cU => from | 0x0000_0001U
+      0xa680U..<=0xa69aU => from | 0x0000_0001U
+      0xa722U..<=0xa72eU => from | 0x0000_0001U
+      0xa732U..<=0xa76eU => from | 0x0000_0001U
+      0xa779U..<=0xa77bU => (from + 1) & 0xFFFF_FFFEU
       0xa77dU => 0x1d79U
-      0xa77eU..=0xa786U => from | 0x0000_0001U
+      0xa77eU..<=0xa786U => from | 0x0000_0001U
       0xa78bU => 0xa78cU
       0xa78dU => 0x0265U
-      0xa790U..=0xa792U => from | 0x0000_0001U
-      0xa796U..=0xa7a8U => from | 0x0000_0001U
+      0xa790U..<=0xa792U => from | 0x0000_0001U
+      0xa796U..<=0xa7a8U => from | 0x0000_0001U
       0xa7aaU => 0x0266U
       0xa7abU => 0x025cU
       0xa7acU => 0x0261U
@@ -385,18 +385,18 @@ fn lookup(orig : Char) -> Fold {
       0xa7b1U => 0x0287U
       0xa7b2U => 0x029dU
       0xa7b3U => 0xab53U
-      0xa7b4U..=0xa7c2U => from | 0x0000_0001U
+      0xa7b4U..<=0xa7c2U => from | 0x0000_0001U
       0xa7c4U => 0xa794U
       0xa7c5U => 0x0282U
       0xa7c6U => 0x1d8eU
-      0xa7c7U..=0xa7c9U => (from + 1) & 0xFFFF_FFFEU
+      0xa7c7U..<=0xa7c9U => (from + 1) & 0xFFFF_FFFEU
       0xa7cbU => 0x0264U
       0xa7ccU => 0xa7cdU
       0xa7d0U => 0xa7d1U
-      0xa7d6U..=0xa7daU => from | 0x0000_0001U
+      0xa7d6U..<=0xa7daU => from | 0x0000_0001U
       0xa7dcU => 0x019bU
       0xa7f5U => 0xa7f6U
-      0xab70U..=0xabbfU => from - 0x97d0
+      0xab70U..<=0xabbfU => from - 0x97d0
       0xfb00U => return Two('\u{0066}', '\u{0066}')
       0xfb01U => return Two('\u{0066}', '\u{0069}')
       0xfb02U => return Two('\u{0066}', '\u{006c}')
@@ -409,21 +409,21 @@ fn lookup(orig : Char) -> Fold {
       0xfb15U => return Two('\u{0574}', '\u{056b}')
       0xfb16U => return Two('\u{057e}', '\u{0576}')
       0xfb17U => return Two('\u{0574}', '\u{056d}')
-      0xff21U..=0xff3aU => from + 0x0020
-      0x10400U..=0x10427U => from + 0x0028
-      0x104b0U..=0x104d3U => from + 0x0028
-      0x10570U..=0x1057aU => from + 0x0027
-      0x1057cU..=0x1058aU => from + 0x0027
-      0x1058cU..=0x10592U => from + 0x0027
-      0x10594U..=0x10595U => from + 0x0027
-      0x10c80U..=0x10cb2U => from + 0x0040
-      0x10d50U..=0x10d65U => from + 0x0020
-      0x118a0U..=0x118bfU => from + 0x0020
-      0x16e40U..=0x16e5fU => from + 0x0020
-      0x1e900U..=0x1e921U => from + 0x0022
+      0xff21U..<=0xff3aU => from + 0x0020
+      0x10400U..<=0x10427U => from + 0x0028
+      0x104b0U..<=0x104d3U => from + 0x0028
+      0x10570U..<=0x1057aU => from + 0x0027
+      0x1057cU..<=0x1058aU => from + 0x0027
+      0x1058cU..<=0x10592U => from + 0x0027
+      0x10594U..<=0x10595U => from + 0x0027
+      0x10c80U..<=0x10cb2U => from + 0x0040
+      0x10d50U..<=0x10d65U => from + 0x0020
+      0x118a0U..<=0x118bfU => from + 0x0020
+      0x16e40U..<=0x16e5fU => from + 0x0020
+      0x1e900U..<=0x1e921U => from + 0x0022
       _ => from
     }
-    One(Int::unsafe_to_char(single_char.reinterpret_as_int()))
+    One(Int32::unsafe_to_char(single_char.reinterpret_as_int()))
   }
 }
 
@@ -1990,11 +1990,11 @@ test "lookup_consistency" {
       0x1e921U => 0x1e943U
       _ => orig.to_uint()
     }
-    One(Int::unsafe_to_char(single_char.reinterpret_as_int()))
+    One(Int32::unsafe_to_char(single_char.reinterpret_as_int()))
   }
 
   for c_index in 0..<126217 {
-    let c = Int::unsafe_to_char(c_index)
+    let c = Int32::unsafe_to_char(c_index)
     let reference : Array[Char] = lookup_naive(c).collect()
     let actual : Array[Char] = lookup(c).collect()
     if actual != reference {
