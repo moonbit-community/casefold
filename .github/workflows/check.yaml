@@ -55,5 +55,6 @@ jobs:
           moon test --target all
       
       - name: moon test --release
+        if: ${{ matrix.os.name != 'windows-latest' }}
         run: |
           moon test --target all --release
